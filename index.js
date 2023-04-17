@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 require("dotenv").config();
+const cors=require('cors');
 const jwt = require("jsonwebtoken");
 const authenticateUser = require("./middleware/authenticateUser");
 const port = 3001;
@@ -8,6 +9,7 @@ const { v4 } = require("uuid");
 const errorHandler = require("./middleware/errorHandler");
 const asyncHandler = require("express-async-handler");
 app.use(express.json());
+app.use(cors());
 
 
 const USERS = [
@@ -87,7 +89,7 @@ const SUBMISSION = [
 ];
 
 
-app.post("/signup", function (req, res) {
+app.post("/signup", asyncHandler(function (req, res) {
   // Add logic to decode body
   // body should have email and password
   const { email, password } = req.body;
@@ -128,7 +130,7 @@ app.post("/signup", function (req, res) {
   
   // return back 200 status code to the client
   res.status(201).json({ success: "Created a user", token });
-})
+}))
 
 
 app.post("/login", asyncHandler(function (req, res) {
@@ -185,6 +187,30 @@ app.get("/questions", asyncHandler(function (req, res) {
   //return the user all the questions in the QUESTIONS array
   res.status(200).json(QUESTIONS);
 }))
+
+
+// return a single question based on its title
+app.get("/questions/:title", asyncHandler(function (req, res) {
+  const { title } = req.params;
+  const checkQuestion = QUESTIONS.find((question) => question.title === title);
+  if (!checkQuestion) {
+    res.status(404)
+    throw new Error("No question found!")
+  }
+
+res.status(200).json(checkQuestion);
+}))
+
+
+
+
+
+
+
+
+
+
+
 
 app.get("/submissions", authenticateUser, asyncHandler(function (req, res) {
   // return the users submissions for this problem
