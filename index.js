@@ -92,8 +92,9 @@ app.post("/signup", function (req, res) {
   // body should have email and password
   const { email, password } = req.body;
   if (!email) {
-    res.status(400)
+ res.status(400)
     throw new Error("Email is required")
+
 
   }
   if (!password) {
