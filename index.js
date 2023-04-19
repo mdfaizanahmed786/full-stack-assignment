@@ -214,18 +214,18 @@ res.status(200).json(checkQuestion);
 
 
 
-app.get("/submissions", authenticateUser, asyncHandler(function (req, res) {
+app.get("/submissions/:questionId", authenticateUser, asyncHandler(function (req, res) {
   // return the users submissions for this problem
   
   const authUser = req.user;
-  const { questionId } = req.body;
+  const { questionId } = req.params;
   if (!questionId) {
-    res.status(404)
-    throw new Error("No submissions found!")
+    res.status(401)
+    throw new Error("Question Id is required")
   }
-  const checkSubmission = SUBMISSION.find(
+  const checkSubmission = SUBMISSION.filter(
     (submission) =>
-      submission.user === authUser.email && questionId === submission.questionId
+      questionId === submission.questionId
   );
   if (!checkSubmission) {
     res.status(404)
@@ -235,7 +235,7 @@ app.get("/submissions", authenticateUser, asyncHandler(function (req, res) {
   // check result
   console.log(checkSubmission);
   
-  res.status(200).json(checkSubmission);
+  res.status(200).json({result:checkSubmission});
 }))
 
 app.post("/submissions", authenticateUser, asyncHandler(function (req, res) {
