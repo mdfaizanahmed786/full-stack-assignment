@@ -3,11 +3,13 @@ const app = express();
 require("dotenv").config();
 const cors=require('cors');
 const jwt = require("jsonwebtoken");
+const morgan=require('morgan');
 const authenticateUser = require("./middleware/authenticateUser");
 const port = 3001;
 const { v4 } = require("uuid");
 const errorHandler = require("./middleware/errorHandler");
 const asyncHandler = require("express-async-handler");
+app.use(morgan('tiny'));
 app.use(express.json());
 app.use(cors());
 
