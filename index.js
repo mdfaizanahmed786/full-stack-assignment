@@ -77,13 +77,13 @@ const QUESTIONS = [
 
 const SUBMISSION = [
   {
-    user: "faizan@gmail.com",
+    email: "faizan@gmail.com",
     questionId: "1",
     code: "function getResults(){ return {result:true}}",
     status: "accepted",
   },
   {
-    user: "faizan@gmail.com",
+    email: "faizan@gmail.com",
     questionId: "2",
     code: "function getResults(){ return {result:true}}",
     status: "rejected",
@@ -274,7 +274,7 @@ app.post("/submissions", authenticateUser, asyncHandler(function (req, res) {
   );
   res.status(201).json({
     success: "Problem submitted successfully",
-    result:SUBMISSION,
+    result:SUBMISSION.filter(question=>question.questionId===questionId),
   });
 }))
 
