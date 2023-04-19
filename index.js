@@ -274,7 +274,7 @@ app.post("/submissions", authenticateUser, asyncHandler(function (req, res) {
   );
   res.status(201).json({
     success: "Problem submitted successfully",
-    result,
+    result:SUBMISSION,
   });
 }))
 
